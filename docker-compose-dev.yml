@@ -1,0 +1,55 @@
+version: '3.5'
+
+services:
+
+  libros:
+    build:
+      context: ./services/libros
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/libros:/usr/src/app'
+    ports:
+      - 5001:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@libros-db:5432/libros_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@libros-db:5432/libros_test
+    depends_on:  
+      - libros-db
+
+  libros-db:  
+    build:
+      context: ./services/libros/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  nginx:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile-dev
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - libros
+      - libros_client
+
+  libros_client:
+    build:
+      context: ./services/libros_client
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/libros_client:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - 3007:3000
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_LIBROS_SERVICE_URL=${REACT_APP_LIBROS_SERVICE_URL}
+    depends_on:
+      - libros    

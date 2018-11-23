@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>App-ventas</title>
+    <!-- meta -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- styles -->
+    <link
+      href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
+      rel="stylesheet"
+    >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    {% block css %}{% endblock %}
+  </head>
+
+  
+  <body>
+    <div style="padding:50px;">
+        
+            <div class="col-md-5">
+                <div class="well well-sm">
+                    <form action="/" class="form-horizontal"method='POST'>
+                            <fieldset>
+                            <legend class="text-center header">Registro de libros</legend>
+    
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
+                                <div class="col-md-8">
+                                    <input id="producto" id="nombre" name="nombre" type="text" placeholder="Nombre del libro" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
+                                <div class="col-md-8">
+                                    <input id="precio" id="autor" name="autor" type="text" placeholder="Autor del libro" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
+                                <div class="col-md-8">
+                                    <input id="precio" id="costo" name="costo" type="number" placeholder="Precio del libro" class="form-control">
+                                </div>
+                            </div>
+
+    
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-pencil-square-o bigicon"></i></span>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion del libro" rows="7"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-pencil-square-o bigicon"></i></span>
+                            <h4 type="text" class="col-md-4" >Seleccione Categoria:</h4>
+                            </div>
+                            <div class="form-group"  style="margin-top:-15px";>
+                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-pencil-square-o bigicon"></i></span>
+                                   <select class="col-md-4" name="categoria"  id="categoria" placeholder="Descripcion del producto">
+                                <option values="option1">Terror</option>
+                                <option values="option2">Realismo</option>
+                                <option values="option3">Drama</option>
+                                <option values="option4">Familia</option>
+                                <option values="option5">Educación</option>
+                                <option values="option6">Ficcion</option>
+                                <option values="option7">Caricatura</option>
+                              </select>
+                            </div>
+                            <div class="form-group" style="float:right";>
+                                <div class="col-md-10" >
+                                    <button type="submit" class="btn btn-primary btn-lg " id="hola">Registrar</button>
+                                </div>
+                                <div class="col-md-2 " ></div>
+                            </div>
+                           
+                        </fieldset>
+                        
+        
+                    </form>
+                </div>
+            </div>
+       
+  <div>
+
+        <div class="col-md-7" style="padding:100px";>
+                <legend class="text-center header">Lista de Libros registrados</legend>
+               
+                      <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                              <th scope="col">Nombre del Libro</th>
+                              <th scope="col">Descripción</th>
+                              <th scope="col">Categoria</th>
+                              <th scope="col">Autor</th>
+                              <th scope="col">Precio</th>
+                            </tr>
+                          </thead>
+                        <tbody>
+                       {% if libros %}
+                        {% for v_libro in libros %}
+                        <tr>
+                       <td>{{v_libro.nombre}}</td>
+                       <td>{{v_libro.descripcion}}</td>
+                       <td>{{v_libro.categoria}}</td>
+                       <td>{{v_libro.autor}}</td>
+                       <td>{{v_libro.costo}}</td>
+                       {% endfor %}
+                       </tr>
+                       {% else %}
+                       <p>No hay libros registrados!</p>
+                       {% endif %}
+                        </tbody>
+                      </table>
+                     
+        </div>
+  </body>
+
+</html>
