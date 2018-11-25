@@ -9,13 +9,16 @@ import unittest
 from project.tests.base import BaseTestCase
 
 
-def add_libro(nombre, descripcion,costo,categoria,autor):
-    libro = Libro(nombre=nombre, descripcion=descripcion, costo=costo, categoria=categoria, autor=autor)
+def add_libro(nombre, descripcion, costo, categoria, autor):
+    libro = Libro(nombre=nombre,
+                  descripcion=descripcion,
+                  costo=costo,
+                  categoria=categoria,
+                  autor=autor)
     db.session.add(libro)
     db.session.commit()
     return libro
 
- 
 
 class TestLibroService(BaseTestCase):
     """Prueba para el servicio de libros."""
@@ -34,21 +37,20 @@ class TestLibroService(BaseTestCase):
         with self.client:
             response = self.client.post(
                 '/libros',
-                 data=json.dumps({
+                  data=json.dumps({
                     'nombre': 'los amantes son dementes',
                     'categoria': 'terror',
                     'costo': '20',
                     'autor': 'gabo',
                     'descripcion': 'desc1'
-
-                }),
+                                 }),
                 content_type='application/json',
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
-            self.assertIn( 'los amantes son dementes ha sido agregado!',
-                    data['mensaje']
-                    )
+            self.assertIn('los amantes son dementes ha sido agregado!',
+                          data['mensaje']
+                          )
             self.assertIn('satisfactorio', data['estado'])
 
     def test_add_libro_invalid_json(self):
@@ -110,13 +112,14 @@ class TestLibroService(BaseTestCase):
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 400)
             self.assertIn(
-                'Disculpe. Este libro ya esta registrado.', data['mensaje'])
+                'Este libro ya esta registrado.', data['mensaje'])
             self.assertIn('fallo', data['estado'])
 
     def test_single_libro(self):
         """Asegurando de que el primer registro individual se comporte
         correctamente."""
-        libros = add_libro('los amantes son dementes', 'terror','20','gabo','desc1')
+        libros = add_libro('los amantes son dementes',
+                           'terror', '20', 'gabo', 'desc1')
         with self.client:
             response = self.client.get(f'/libro/{libros.id}')
             data = json.loads(response.data.decode())
@@ -142,7 +145,6 @@ class TestLibroService(BaseTestCase):
             self.assertEqual(response.status_code, 404)
             self.assertIn('Libro no existe', data['mensaje'])
             self.assertIn('fallo', data['estado'])
-        
 
     def test_vista_con_registros(self):
         """Probamos la vista"""
@@ -152,27 +154,35 @@ class TestLibroService(BaseTestCase):
         self.assertIn(b'<p>No hay libros registrados!</p>', response.data)
 
     def test_vista_sin_registros(self):
-        """Asegurandose de que la vista se comporte correctamente cuando ingresamos datos."""
-        add_libro('los amantes son dementes', 'terror','20','gabo','desc1')
-  
+        """Asegurandose de que la vista se comporte
+           correctamente cuando ingresamos datos."""
+        add_libro('los amantes son dementes',
+                  'terror', '20', 'gabo', 'desc1')
         with self.client:
             response = self.client.get('/')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Registro de libros', response.data)
-            self.assertNotIn(b'<p>No hay libros registrados!</p>', response.data)
+            self.assertNotIn(b'<p>No hay libros registrados!</p>',
+                             response.data)
             self.assertIn(b'los amantes son dementes', response.data)
 
     def test_vista_add_libros(self):
-        """Aseguramos que un nuevo libro puede ser añadido a la base de datos."""
+        """Aseguramos que un nuevo libro puede
+           ser añadido a la base de datos."""
         with self.client:
             response = self.client.post(
                 '/',
-                data=dict(nombre='los amantes son dementes', categoria="terror", costo="20", autor="gabo",descripcion="desc1"),
+                data=dict(nombre='los amantes son dementes',
+                          categoria="terror",
+                          costo="20",
+                          autor="gabo",
+                          descripcion="desc1"),
                 follow_redirects=True
             )
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Registro de libros', response.data)
-            self.assertNotIn(b'<p>No hay libros registrados!</p>', response.data)
+            self.assertNotIn(b'<p>No hay libros registrados!</p>',
+                             response.data)
             self.assertIn(b'los amantes son dementes', response.data)
 
 

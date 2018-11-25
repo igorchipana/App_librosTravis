@@ -1,5 +1,4 @@
-
-from flask import Blueprint, jsonify, request, render_template, redirect,url_for
+from flask import Blueprint, jsonify, request, render_template
 from project.api.models import Libro
 from project import db
 from sqlalchemy import exc
@@ -8,14 +7,12 @@ from sqlalchemy import exc
 libros_blueprint = Blueprint('libros', __name__, template_folder='./templates')
 
 
-
 @libros_blueprint.route('/libro/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
         'estado': 'exito',
         'mensaje': 'probando!!!'
     })
-
 
 
 @libros_blueprint.route('/libros', methods=['POST'])
@@ -35,13 +32,17 @@ def add_libros():
     try:
         libro = Libro.query.filter_by(nombre=nombre).first()
         if not libro:
-            db.session.add(Libro(nombre=nombre, categoria=categoria, costo=costo,autor=autor,descripcion=descripcion))
+            db.session.add(Libro(nombre=nombre,
+                                 categoria=categoria,
+                                 costo=costo,
+                                 autor=autor,
+                                 descripcion=descripcion))
             db.session.commit()
             response_object['estado'] = 'satisfactorio'
             response_object['mensaje'] = f'{nombre} ha sido agregado!'
             return jsonify(response_object), 201
         else:
-            response_object['mensaje'] = 'Disculpe. Este libro ya esta registrado.'
+            response_object['mensaje'] = 'Este libro ya esta registrado.'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
@@ -70,7 +71,6 @@ def get_single_libros(user_id):
                     'costo': libro.costo,
                     'descripcion': libro.descripcion,
                     'autor': libro.autor
-                
                 }
             }
             return jsonify(response_object), 200
@@ -90,11 +90,8 @@ def get_all_libros():
     return jsonify(response_object), 200
 
 
-
-
 @libros_blueprint.route('/', methods=['GET', 'POST'])
 def index():
-    
     if request.method == 'POST':
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
@@ -103,23 +100,22 @@ def index():
         autor = request.form['autor']
 
         if not nombre:
-          print("no hay data de libro")
+            print("no hay data de libro")
         if not categoria:
-          print("no hay categoria")
+            print("no hay categoria")
         if not autor:
-          print("no hay autor")
+            print("no hay autor")
         if not costo:
-          print("no hay costo")
+            print("no hay costo")
         if not descripcion:
-          print("no hay descripcion")
-               
+            print("no hay descripcion")
         else:
-          print("se registro correctamente")
-          db.session.add(Libro(nombre=nombre, descripcion=descripcion, costo=costo, categoria=categoria, autor=autor))
-          db.session.commit()
+            print("se registro correctamente")
+            db.session.add(Libro(nombre=nombre,
+                                 descripcion=descripcion,
+                                 costo=costo,
+                                 categoria=categoria,
+                                 autor=autor))
+            db.session.commit()
     libro = Libro.query.all()
     return render_template('index.html', libros=libro)
-     
-
-
-

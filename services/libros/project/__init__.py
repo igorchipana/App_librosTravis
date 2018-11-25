@@ -3,7 +3,7 @@
 
 import os
 
-from flask import Flask  # <-- nuevo
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
@@ -17,9 +17,8 @@ def create_app(script_info=None):
 
     # instanciando la app
     app = Flask(__name__)
-    
     # enable CORS
-    CORS(app)  # nuevo
+    CORS(app)
 
     # estableciendo configuracion
     app_settings = os.getenv('APP_SETTINGS')

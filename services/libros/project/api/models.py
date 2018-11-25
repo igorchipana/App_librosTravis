@@ -27,11 +27,9 @@ class Libro(db.Model):
             'active': self.active
         }
 
-    def __init__(self, nombre, categoria,costo,autor,descripcion):
+    def __init__(self, nombre, categoria, costo, autor, descripcion):
         self.nombre = nombre
         self.categoria = categoria
         self.costo = costo
         self.autor = autor
         self.descripcion = descripcion
-
-
