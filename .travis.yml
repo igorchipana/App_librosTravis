@@ -12,12 +12,8 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-before_script:
-  - docker-compose -f docker-compose-dev.yml up --build -d
-
 script:
   - docker-compose -f docker-compose-dev.yml run libros python manage.py test
   - docker-compose -f docker-compose-dev.yml run libros flake8 project
 
-after_script:
-  - docker-compose -f docker-compose-dev.yml down
+
